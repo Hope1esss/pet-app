@@ -65,7 +65,7 @@ func getAccessToken() string {
 
 }
 func prepareInputMessage(inputMessage string) []byte {
-	prompt := "Ты профессиональный зоолог. Твоя задача – подобрать пользователю домашнее животное, максимально удовлетворяющее его пожеланиям. Ответ должен быть такого формата: \n1) Тебе необходимо дать в ответ от 5 до 10 вариантов пород или животных;\n2) К каждому варианту должно прилагаться описание этого варианта, которое рассказывает как о положительных сторонах, так и об отрицательных. Объём – от 20 до 50 слов. \n"
+	prompt := "Ты профессиональный зоолог. Твоя задача – подобрать пользователю домашнее животное, максимально удовлетворяющее его пожеланиям. Ответ должен быть такого формата: \n1) Ответ состоит МИНИМУМ из 5 пунктов. Чем больше - тем лучше;\n2) К каждому варианту должно прилагаться описание этого варианта, которое рассказывает как о положительных сторонах, так и об отрицательных. Объём – от 20 до 50 слов. \n"
 	type Message struct {
 		Role    string `json:"role"`
 		Content string `json:"content"`
@@ -167,8 +167,19 @@ func messageToGigaChat(jsonBody []byte) []byte {
 	}
 	return body
 }
+func Giga(inputMessage string) string {
+	return prepareOutputMessage(messageToGigaChat(prepareInputMessage(inputMessage)))
+}
 
 func (h *Handler) GigaChat(c *gin.Context) {
-	inputMessage := "Мне нужно чистоплотное животное, которое будет хорошо ладить с людьми"
-	prepareOutputMessage(messageToGigaChat(prepareInputMessage(inputMessage)))
+	var inputMessage string
+	if err := c.BindJSON(&inputMessage); err != nil {
+		NewValidationResponse(c, http.StatusBadRequest, "Invalid input")
+		return
+	}
+
+	response := Giga(inputMessage)
+
+	c.String(http.StatusOK, response)
+
 }

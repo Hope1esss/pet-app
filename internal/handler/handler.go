@@ -15,7 +15,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.GET("/GigaChat", h.GigaChat)
+		api.POST("/GigaChat", h.GigaChat)
 	}
 	return router
 }
