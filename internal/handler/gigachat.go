@@ -13,7 +13,7 @@ import (
 )
 
 func getAccessToken() string {
-	if err := godotenv.Load("D:/Programming/pet-app/internal/config/gigachat.env"); err != nil {
+	if err := godotenv.Load("./internal/config/gigachat.env"); err != nil {
 		log.Print("No .env file found")
 	}
 
