@@ -9,6 +9,7 @@ type Pet struct {
 	Breed       string  `json:"breed"`
 	Age         int     `json:"age"`
 	Size        string  `json:"size"`
+	Gender      string  `json:"gender"`
 	Description string  `json:"description"`
 	PhotoURL    url.URL `json:"photo_url"`
 }

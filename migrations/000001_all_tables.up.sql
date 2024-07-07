@@ -13,6 +13,7 @@ CREATE TABLE pets (
     breed VARCHAR(31),
     age INTEGER NOT NULL,
     size VARCHAR(31),
+    gender VARCHAR(31),
     description VARCHAR(255),
     photo_url VARCHAR(255)
 );
