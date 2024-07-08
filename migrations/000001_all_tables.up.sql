@@ -9,13 +9,14 @@ CREATE TABLE users
 
 CREATE TABLE pets
 (
-    id          serial      not null unique PRIMARY KEY,
+    id          serial       not null unique PRIMARY KEY,
     name        VARCHAR(255) NOT NULL,
     type        VARCHAR(255) NOT NULL,
     breed       VARCHAR(255),
-    age         VARCHAR(255)     NOT NULL,
-    size        VARCHAR(31),
-    gender      VARCHAR(31) NOT NULL,
+    age         VARCHAR(255) NOT NULL,
+    size        VARCHAR(255),
+    gender      VARCHAR(255) NOT NULL,
     description VARCHAR(255),
-    add_date    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    add_date    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    added_by_user_id    INTEGER NOT NULL
 );

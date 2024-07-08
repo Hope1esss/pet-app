@@ -11,6 +11,7 @@ type Authorization interface {
 }
 
 type Pet interface {
+	AddPet(pet model.Pet) (int, error)
 }
 
 type Repository struct {
@@ -21,5 +22,6 @@ type Repository struct {
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
 		Authorization: NewUserPostgres(db),
+		Pet:           NewPetPostgres(db),
 	}
 }

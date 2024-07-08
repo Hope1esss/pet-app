@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-const userCtx = "userId"
-
 func (h *Handler) userIdentity(c *gin.Context) {
 	header := c.GetHeader("Authorization")
 	if header == "" {
@@ -27,6 +25,6 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		return
 	}
 
-	c.Set(userCtx, userId)
+	c.Set("userId", userId)
 
 }
