@@ -25,6 +25,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		user.POST("/addPetInBookmarks/:id", h.addPetInBookmarksById)             // Добавление животного в закладки по id
 		user.DELETE("/deletePetFromBookmarks/:id", h.deletePetFromBookmarksById) // Удаление животного из закладок по id
+		user.DELETE("/deleteUser", h.deleteUser)
 	}
 
 	api := router.Group("/api", h.userIdentity)

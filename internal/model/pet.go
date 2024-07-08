@@ -1,16 +1,15 @@
 package model
 
-import "net/url"
+import "time"
 
 type Pet struct {
-	Id          int     `json:"id"`
-	Name        string  `json:"name"`
-	Type        string  `json:"type"`
-	Breed       string  `json:"breed"`
-	Age         int     `json:"age"`
-	Size        string  `json:"size"`
-	Gender      string  `json:"gender"`
-	Description string  `json:"description"`
-	PhotoURL    url.URL `json:"photo_url"`
-	AddDate     string  `json:"addDate"`
+	Id          int       `json:"id"`
+	Name        string    `json:"name" binding:"required"`
+	Type        string    `json:"type" binding:"required"`
+	Breed       string    `json:"breed"`
+	Age         string    `json:"age" binding:"required"`
+	Size        string    `json:"size"`
+	Gender      string    `json:"gender" binding:"required"`
+	Description string    `json:"description"`
+	AddDate     time.Time `json:"addDate"`
 }
