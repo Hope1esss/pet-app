@@ -2,12 +2,11 @@ package main
 
 import (
 	"context"
+	"github.com/Hope1esss/pet-app/internal/config"
 	"github.com/Hope1esss/pet-app/internal/handler"
-	"github.com/Hope1esss/pet-app/internal/repository"
-	"github.com/Hope1esss/pet-app/internal/service"
-	"github.com/spf13/viper"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -31,21 +30,10 @@ func (s *Server) Shutdown(c context.Context) error {
 }
 
 func main() {
-	if err := initConfig(); err != nil {
-		log.Fatalf("Ошибка при инициализации конфига: %s", err.Error())
-	}
-	repos := repository.NewRepository()
-	services := service.NewService(repos)
-	handlers := handler.NewHandler(services)
-
+	db := config.InitConfig()
+	app := handler.InitApp(db)
 	srv := new(Server)
-	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+	if err := srv.Run(os.Getenv("SERVER_PORT"), app.InitRoutes()); err != nil {
 		log.Fatalf("Ошибка при запуске http сервера: %s", err.Error())
 	}
-}
-
-func initConfig() error {
-	viper.AddConfigPath("internal/config")
-	viper.SetConfigName("config")
-	return viper.ReadInConfig()
 }
