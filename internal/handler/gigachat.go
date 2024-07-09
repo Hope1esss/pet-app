@@ -20,7 +20,7 @@ import (
 //	@Failure    400    {object}  ErrorResponse
 //	@Failure    401    {object}  ErrorResponse
 //	@Failure    500    {object}  ErrorResponse
-//	@Router      /api/recommendations [post]
+//	@Router      /api/gigachat/recommendations [post]
 func (h *Handler) getRecommendationsFromGigaChat(c *gin.Context) {
 	var inputMessage string
 	if err := c.BindJSON(&inputMessage); err != nil {
