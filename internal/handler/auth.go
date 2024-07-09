@@ -4,6 +4,7 @@ import (
 	"github.com/Hope1esss/pet-app/internal/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func (h *Handler) signUp(c *gin.Context) {
@@ -18,10 +19,7 @@ func (h *Handler) signUp(c *gin.Context) {
 		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"id": id,
-	})
-
+	NewSuccessResponse(c, http.StatusOK, strconv.Itoa(id))
 }
 
 type SignInInput struct {
@@ -41,8 +39,5 @@ func (h *Handler) signIn(c *gin.Context) {
 		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"token": token,
-	})
-
+	NewSuccessResponse(c, http.StatusOK, token)
 }
