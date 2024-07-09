@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"github.com/Hope1esss/pet-app/internal/model"
 	"gorm.io/gorm"
 )
@@ -19,4 +20,47 @@ func (r *PetPostgres) AddPet(pet model.Pet) (int, error) {
 		return 0, result.Error
 	}
 	return pet.Id, nil
+}
+
+func (r *PetPostgres) GetAllPets() ([]model.Pet, error) {
+	var pets []model.Pet
+	result := r.db.Table("pets").Find(&pets)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return pets, nil
+}
+
+func (r *PetPostgres) GetPetById(id int) (model.Pet, error) {
+	var pet model.Pet
+	result := r.db.Table("pets").Where("id =?", id).First(&pet)
+	if result.Error != nil {
+		return model.Pet{}, result.Error
+	}
+	return pet, nil
+}
+
+func (r *PetPostgres) FindByBreed(breed string) ([]model.Pet, error) {
+	var pets []model.Pet
+	result := r.db.Table("pets").Where("breed =?", breed).Find(&pets)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if len(pets) == 0 {
+		return nil, errors.New("breed not found")
+	}
+	return pets, nil
+}
+
+func (r *PetPostgres) FindByType(petType string) ([]model.Pet, error) {
+	var pets []model.Pet
+	result := r.db.Table("pets").Where("type =?", petType).Find(&pets)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	if len(pets) == 0 {
+		return nil, errors.New("type not found")
+	}
+	return pets, nil
 }

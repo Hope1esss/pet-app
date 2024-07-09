@@ -12,16 +12,24 @@ type Authorization interface {
 
 type Pet interface {
 	AddPet(pet model.Pet) (int, error)
+	GetAllPets() ([]model.Pet, error)
+	GetPetById(id int) (model.Pet, error)
+	FindByBreed(breed string) ([]model.Pet, error)
+	FindByType(petType string) ([]model.Pet, error)
 }
 
+type Bookmarks interface {
+}
 type Repository struct {
 	Authorization
 	Pet
+	Bookmarks
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
 		Authorization: NewUserPostgres(db),
 		Pet:           NewPetPostgres(db),
+		Bookmarks:     NewBookmarksPostgres(db),
 	}
 }

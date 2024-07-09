@@ -13,16 +13,24 @@ type Authorization interface {
 
 type Pet interface {
 	AddPet(pet model.Pet) (int, error)
+	GetAllPets() ([]model.Pet, error)
+	GetPetById(id int) (model.Pet, error)
+	FindByBreed(breed string) ([]model.Pet, error)
+	FindByType(petType string) ([]model.Pet, error)
 }
 
+type Bookmarks interface {
+}
 type Service struct {
 	Authorization
 	Pet
+	Bookmarks
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
 		Pet:           NewPetService(repos.Pet),
+		Bookmarks:     NewBookmarksService(repos.Bookmarks),
 	}
 }

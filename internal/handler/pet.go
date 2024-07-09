@@ -4,6 +4,8 @@ import (
 	"github.com/Hope1esss/pet-app/internal/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -19,9 +21,21 @@ type petInput struct {
 	AddedBy     string    `json:"addedBy"`
 }
 
+type getResponse struct {
+	Data []model.Pet `json:"data"`
+}
+
 func (h *Handler) addPet(c *gin.Context) {
 	var input petInput
 	userId, _ := c.Get("userId")
+	if err := c.BindJSON(&input); err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	input.Type = strings.ToUpper(input.Type)
+	input.Breed = strings.ToUpper(input.Breed)
+
 	pet := model.Pet{
 		Name:          input.Name,
 		Type:          input.Type,
@@ -34,11 +48,6 @@ func (h *Handler) addPet(c *gin.Context) {
 		AddedByUserId: userId.(int),
 	}
 
-	if err := c.BindJSON(&pet); err != nil {
-		NewErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-
 	id, err := h.services.Pet.AddPet(pet)
 	if err != nil {
 		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
@@ -49,22 +58,64 @@ func (h *Handler) addPet(c *gin.Context) {
 	})
 }
 
-func (h *Handler) getPet(c *gin.Context) {
+func (h *Handler) getAllPets(c *gin.Context) {
 
+	pets, err := h.services.Pet.GetAllPets()
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, getResponse{
+		Data: pets,
+	})
 }
+
+func (h *Handler) getPetById(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, "invalid id")
+		return
+	}
+
+	pet, err := h.services.Pet.GetPetById(id)
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, pet)
+}
+
 func (h *Handler) updatePetInfo(c *gin.Context) {
 
 }
 
-func (h *Handler) uploadPetImage(c *gin.Context) {
-
-}
-
 func (h *Handler) findByBreed(c *gin.Context) {
+	breed := strings.ToUpper(c.Param("breed"))
+
+	pets, err := h.services.Pet.FindByBreed(breed)
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, getResponse{
+		Data: pets,
+	})
 
 }
 
 func (h *Handler) findByType(c *gin.Context) {
+	petType := strings.ToUpper(c.Param("type"))
+
+	pets, err := h.services.Pet.FindByType(petType)
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, getResponse{
+		Data: pets,
+	})
 
 }
 

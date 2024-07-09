@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Pet struct {
-	Id            int       `json:"id"`
+	Id            int       `json:"id" db:"id"`
 	Name          string    `json:"name" binding:"required"`
 	Type          string    `json:"type" binding:"required"`
 	Breed         string    `json:"breed"`
@@ -12,5 +12,5 @@ type Pet struct {
 	Gender        string    `json:"gender" binding:"required"`
 	Description   string    `json:"description"`
 	AddDate       time.Time `json:"add_date"`
-	AddedByUserId int       `json:"added_by"`
+	AddedByUserId int       `json:"added_by_user_id"`
 }

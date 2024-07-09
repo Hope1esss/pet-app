@@ -21,24 +21,33 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("sign-up", h.signUp)
 		auth.POST("sign-in", h.signIn)
 	}
+
 	user := router.Group("/user", h.userIdentity)
 	{
-		user.POST("/addPetInBookmarks/:id", h.addPetInBookmarksById)             // Добавление животного в закладки по id
-		user.DELETE("/deletePetFromBookmarks/:id", h.deletePetFromBookmarksById) // Удаление животного из закладок по id
-		user.DELETE("/deleteUser", h.deleteUser)
+		user.GET("/recommendations", h.getRecommendationsFromGigaChat) // Получение рекомендаций от гигачата
+		user.PATCH("/", h.updateUser)                                  // Изменение данных пользователя
+		user.DELETE("/", h.deleteUser)                                 // Удаление пользователя
 	}
 
 	api := router.Group("/api", h.userIdentity)
 	{
 		pets := api.Group("/pets")
 		{
-			pets.POST("/", h.addPet)                        // Добавление животного
-			pets.GET("/:id", h.getPet)                      // Получение данных животного по id
-			pets.PATCH("/:id", h.updatePetInfo)             // Изменение данных животного по id
-			pets.POST("/:id/uploadImage", h.uploadPetImage) // Загрузка изображения животного по id
-			pets.GET("/findByBreed", h.findByBreed)         // Поиск животных по породе
-			pets.GET("/findByType", h.findByType)           // Поиск животных по типу животного (кошка, собака и т.д)
-			pets.DELETE("/:id", h.deletePet)                // Удаление животного по id
+			pets.POST("/", h.addPet)                       // Добавление животного DONE
+			pets.GET("/:id", h.getPetById)                 // Получение данных животного по id DONE
+			pets.GET("/", h.getAllPets)                    // Получение всех животных DONE
+			pets.PATCH("/:id", h.updatePetInfo)            // Изменение данных животного по id
+			pets.PATCH("/updateInfo/:id", h.updatePetInfo) // Загрузка изображения животного по id
+			pets.GET("/findByBreed/:breed", h.findByBreed) // Поиск животных по породе DONE
+			pets.GET("/findByType/:type", h.findByType)    // Поиск животных по типу животного (кошка, собака и т.д) DONE
+			pets.DELETE("/:id", h.deletePet)               // Удаление животного по id
+		}
+
+		bookmarks := api.Group("/bookmarks")
+		{
+			bookmarks.GET("/", h.getAllBookmarks)                  //Получение всех закладок
+			bookmarks.POST("/:id", h.addPetInBookmarksById)        // Добавление животного в закладки по id
+			bookmarks.DELETE("/:id", h.deletePetFromBookmarksById) // Удаление животного из закладок по id
 		}
 	}
 
