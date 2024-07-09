@@ -36,18 +36,17 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			pets.POST("/", h.addPet)                       // Добавление животного DONE
 			pets.GET("/:id", h.getPetById)                 // Получение данных животного по id DONE
 			pets.GET("/", h.getAllPets)                    // Получение всех животных DONE
-			pets.PATCH("/:id", h.updatePetInfo)            // Изменение данных животного по id
-			pets.PATCH("/updateInfo/:id", h.updatePetInfo) // Загрузка изображения животного по id
+			pets.PATCH("/:id", h.updatePetInfoById)        // Изменение данных животного по id DONE
 			pets.GET("/findByBreed/:breed", h.findByBreed) // Поиск животных по породе DONE
 			pets.GET("/findByType/:type", h.findByType)    // Поиск животных по типу животного (кошка, собака и т.д) DONE
-			pets.DELETE("/:id", h.deletePet)               // Удаление животного по id
+			pets.DELETE("/:id", h.deletePetById)           // Удаление животного по id DONE
 		}
 
 		bookmarks := api.Group("/bookmarks")
 		{
-			bookmarks.GET("/", h.getAllBookmarks)                  //Получение всех закладок
-			bookmarks.POST("/:id", h.addPetInBookmarksById)        // Добавление животного в закладки по id
-			bookmarks.DELETE("/:id", h.deletePetFromBookmarksById) // Удаление животного из закладок по id
+			bookmarks.GET("/", h.getAllBookmarks)                  //Получение всех закладок DONE
+			bookmarks.POST("/:id", h.addPetInBookmarksById)        // Добавление животного в закладки по id DONE
+			bookmarks.DELETE("/:id", h.deletePetFromBookmarksById) // Удаление животного из закладок по id DONE
 		}
 	}
 

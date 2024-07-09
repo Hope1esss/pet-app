@@ -18,5 +18,5 @@ CREATE TABLE pets
     gender           VARCHAR(255) NOT NULL,
     description      VARCHAR(255) NOT NULL UNIQUE,
     add_date         TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    added_by_user_id INTEGER      NOT NULL
+    edited_by_user_id INTEGER      NOT NULL
 );

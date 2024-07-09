@@ -64,3 +64,20 @@ func (r *PetPostgres) FindByType(petType string) ([]model.Pet, error) {
 	}
 	return pets, nil
 }
+
+func (r *PetPostgres) DeletePetById(id int) error {
+	result := r.db.Table("pets").Where("id =?", id).Delete(&model.Pet{})
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+
+}
+
+func (r *PetPostgres) UpdatePetInfoById(petId int, pet model.Pet) (int, error) {
+	result := r.db.Table("pets").Where("id =?", petId).Updates(pet)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return petId, nil
+}

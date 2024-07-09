@@ -16,9 +16,14 @@ type Pet interface {
 	GetPetById(id int) (model.Pet, error)
 	FindByBreed(breed string) ([]model.Pet, error)
 	FindByType(petType string) ([]model.Pet, error)
+	DeletePetById(id int) error
+	UpdatePetInfoById(petId int, pet model.Pet) (int, error)
 }
 
 type Bookmarks interface {
+	AddPetInBookmarksById(userId, petId int64) (model.Pet, error)
+	GetAllBookmarks(userId int64) ([]model.Pet, error)
+	DeletePetFromBookmarksById(userId, petId int64) error
 }
 type Repository struct {
 	Authorization

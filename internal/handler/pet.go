@@ -18,7 +18,7 @@ type petInput struct {
 	Gender      string    `json:"gender" binding:"required"`
 	Description string    `json:"description"`
 	AddDate     time.Time `json:"addDate"`
-	AddedBy     string    `json:"addedBy"`
+	EditedBy    string    `json:"addedBy"`
 }
 
 type getResponse struct {
@@ -37,15 +37,15 @@ func (h *Handler) addPet(c *gin.Context) {
 	input.Breed = strings.ToUpper(input.Breed)
 
 	pet := model.Pet{
-		Name:          input.Name,
-		Type:          input.Type,
-		Breed:         input.Breed,
-		Age:           input.Age,
-		Size:          input.Size,
-		Gender:        input.Gender,
-		Description:   input.Description,
-		AddDate:       time.Now(),
-		AddedByUserId: userId.(int),
+		Name:           input.Name,
+		Type:           input.Type,
+		Breed:          input.Breed,
+		Age:            input.Age,
+		Size:           input.Size,
+		Gender:         input.Gender,
+		Description:    input.Description,
+		AddDate:        time.Now(),
+		EditedByUserId: userId.(int),
 	}
 
 	id, err := h.services.Pet.AddPet(pet)
@@ -86,7 +86,39 @@ func (h *Handler) getPetById(c *gin.Context) {
 	c.JSON(http.StatusOK, pet)
 }
 
-func (h *Handler) updatePetInfo(c *gin.Context) {
+func (h *Handler) updatePetInfoById(c *gin.Context) {
+	var input petInput
+	userId, _ := c.Get("userId")
+	petId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, "invalid id")
+		return
+	}
+	if err = c.BindJSON(&input); err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	input.Type = strings.ToUpper(input.Type)
+	input.Breed = strings.ToUpper(input.Breed)
+	pet := model.Pet{
+		Name:           input.Name,
+		Type:           input.Type,
+		Breed:          input.Breed,
+		Age:            input.Age,
+		Size:           input.Size,
+		Gender:         input.Gender,
+		Description:    input.Description,
+		AddDate:        time.Now(),
+		EditedByUserId: userId.(int),
+	}
+	id, err := h.services.Pet.UpdatePetInfoById(petId, pet)
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"id": id,
+	})
 
 }
 
@@ -119,6 +151,19 @@ func (h *Handler) findByType(c *gin.Context) {
 
 }
 
-func (h *Handler) deletePet(c *gin.Context) {
+func (h *Handler) deletePetById(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, "invalid id")
+		return
+	}
 
+	err = h.services.Pet.DeletePetById(id)
+	if err != nil {
+		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "pet deleted successfully",
+	})
 }

@@ -31,3 +31,11 @@ func (s *PetService) FindByBreed(breed string) ([]model.Pet, error) {
 func (s *PetService) FindByType(petType string) ([]model.Pet, error) {
 	return s.repos.FindByType(petType)
 }
+
+func (s *PetService) DeletePetById(id int) error {
+	return s.repos.DeletePetById(id)
+}
+
+func (s *PetService) UpdatePetInfoById(petId int, pet model.Pet) (int, error) {
+	return s.repos.UpdatePetInfoById(petId, pet)
+}
