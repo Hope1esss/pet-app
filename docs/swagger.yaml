@@ -203,7 +203,7 @@ paths:
   /api/gigachat/recommendations:
     post:
       consumes:
-      - application/json
+      - text/plain
       description: Get recommendations from GigaChat
       operationId: get-recommendations
       parameters:

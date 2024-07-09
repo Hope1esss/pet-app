@@ -47,7 +47,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 		gigachat := api.Group("/gigachat")
 		{
-			gigachat.GET("/recommendations", h.getRecommendationsFromGigaChat)
+			gigachat.POST("/recommendations", h.getRecommendationsFromGigaChat)
 		}
 	}
 

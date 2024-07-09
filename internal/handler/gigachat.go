@@ -13,7 +13,7 @@ import (
 //	@Tags      Recommendations
 //	@Description  Get recommendations from GigaChat
 //	@ID        get-recommendations
-//	@Accept      json
+//	@Accept      plain
 //	@Produce    plain
 //	@Param      message  body    string  true  "Input message"
 //	@Success    200    {string}  string  "Response message"

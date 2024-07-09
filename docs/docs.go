@@ -185,7 +185,7 @@ const docTemplate = `{
                 ],
                 "description": "Get recommendations from GigaChat",
                 "consumes": [
-                    "application/json"
+                    "text/plain"
                 ],
                 "produces": [
                     "text/plain"
