@@ -1,0 +1,518 @@
+basePath: /
+definitions:
+  handler.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.SignInInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  handler.SignUpInput:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+  handler.getResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Pet'
+        type: array
+    type: object
+  handler.petInput:
+    properties:
+      addDate:
+        type: string
+      addedBy:
+        type: string
+      age:
+        type: string
+      breed:
+        type: string
+      description:
+        type: string
+      gender:
+        type: string
+      name:
+        type: string
+      size:
+        type: string
+      type:
+        type: string
+    required:
+    - age
+    - gender
+    - name
+    - type
+    type: object
+  model.Pet:
+    properties:
+      add_date:
+        type: string
+      added_by_user_id:
+        type: integer
+      age:
+        type: string
+      breed:
+        type: string
+      description:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      size:
+        type: string
+      type:
+        type: string
+    required:
+    - age
+    - gender
+    - name
+    - type
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: API Server PetApp Application
+  title: Pet-app API
+  version: "1.0"
+paths:
+  /api/bookmarks:
+    get:
+      consumes:
+      - application/json
+      description: Get all bookmarks for the user
+      operationId: get-all-bookmarks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Pet'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Bookmarks
+      tags:
+      - Bookmarks
+  /api/bookmarks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a pet from the user's bookmarks by pet ID
+      operationId: delete-pet-from-bookmarks
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Pet from Bookmarks
+      tags:
+      - Bookmarks
+    post:
+      consumes:
+      - application/json
+      description: Add a pet to the user's bookmarks by pet ID
+      operationId: add-pet-in-bookmarks
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Pet'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add Pet to Bookmarks
+      tags:
+      - Bookmarks
+  /api/pets:
+    get:
+      consumes:
+      - application/json
+      description: Get all pets
+      operationId: get-all-pets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Pets
+      tags:
+      - Pets
+    post:
+      consumes:
+      - application/json
+      description: Add a new pet
+      operationId: add-pet
+      parameters:
+      - description: Pet info
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/handler.petInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add Pet
+      tags:
+      - Pets
+  /api/pets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete pet by ID
+      operationId: delete-pet-by-id
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Pet By ID
+      tags:
+      - Pets
+    get:
+      consumes:
+      - application/json
+      description: Get pet by ID
+      operationId: get-pet-by-id
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Pet'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Pet By ID
+      tags:
+      - Pets
+    patch:
+      consumes:
+      - application/json
+      description: Update pet info by ID
+      operationId: update-pet-info-by-id
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated pet info
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/handler.petInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Pet Info By ID
+      tags:
+      - Pets
+  /api/pets/findByBreed/{breed}:
+    get:
+      consumes:
+      - application/json
+      description: Find pets by breed
+      operationId: find-by-breed
+      parameters:
+      - description: Pet breed
+        in: path
+        name: breed
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Find Pets By Breed
+      tags:
+      - Pets
+  /api/pets/findByType/{type}:
+    get:
+      consumes:
+      - application/json
+      description: Find pets by type
+      operationId: find-by-type
+      parameters:
+      - description: Pet type
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Find Pets By Type
+      tags:
+      - Pets
+  /api/recommendations:
+    post:
+      consumes:
+      - application/json
+      description: Get recommendations from GigaChat
+      operationId: get-recommendations
+      parameters:
+      - description: Input message
+        in: body
+        name: message
+        required: true
+        schema:
+          type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Response message
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Recommendations
+      tags:
+      - Recommendations
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Sign In
+      operationId: sign-in
+      parameters:
+      - description: Account info
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SignInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Sign In
+      tags:
+      - Account
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Сreates a new user in the system
+      operationId: sign-up
+      parameters:
+      - description: Account info
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SignUpInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Sign Up
+      tags:
+      - Account
+securityDefinitions:
+  ApiKeyAuth:
+    in: Header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -4,9 +4,26 @@ import (
 	"github.com/Hope1esss/pet-app/internal/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
+type SignUpInput struct {
+	Name     string `json:"name" binding:"required"`
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+// signUp godoc
+//
+//	@Summary    Sign Up
+//	@Tags      Account
+//	@Description  Сreates a new user in the system
+//	@ID        sign-up
+//	@Accept      json
+//	@Produce    json
+//	@Param      query  body  SignUpInput  true  "Account info"
+//	@Success    200    {object}  map[string]interface{}
+//	@Failure    400    {object}  ErrorResponse
+//	@Router      /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var input model.User
 
@@ -19,7 +36,9 @@ func (h *Handler) signUp(c *gin.Context) {
 		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	NewSuccessResponse(c, http.StatusOK, strconv.Itoa(id))
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"id": id,
+	})
 }
 
 type SignInInput struct {
@@ -27,6 +46,19 @@ type SignInInput struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// signIn godoc
+//
+//	@Summary    Sign In
+//	@Tags      Account
+//	@Description  Sign In
+//	@ID        sign-in
+//	@Accept      json
+//	@Produce    json
+//	@Param      query  body    SignInInput  true  "Account info"
+//	@Success    200    {object}  map[string]interface{}
+//	@Failure    400    {object}  ErrorResponse
+//	@Failure    500    {object}  ErrorResponse
+//	@Router      /auth/sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
 	var input SignInInput
 
@@ -39,5 +71,7 @@ func (h *Handler) signIn(c *gin.Context) {
 		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	NewSuccessResponse(c, http.StatusOK, token)
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"token": token,
+	})
 }

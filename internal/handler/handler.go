@@ -1,8 +1,11 @@
 package handler
 
 import (
+	_ "github.com/Hope1esss/pet-app/docs"
 	"github.com/Hope1esss/pet-app/internal/service"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Handler struct {
@@ -15,16 +18,12 @@ func NewHandler(services *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	auth := router.Group("/auth")
 	{
 		auth.POST("sign-up", h.signUp)
 		auth.POST("sign-in", h.signIn)
-	}
-
-	gigachat := router.Group("/gigachat", h.userIdentity)
-	{
-		gigachat.GET("/recommendations", h.getRecommendationsFromGigaChat) // Получение рекомендаций от гигачата DONE
 	}
 
 	api := router.Group("/api", h.userIdentity)
@@ -45,6 +44,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			bookmarks.GET("/", h.getAllBookmarks)                  //Получение всех закладок DONE
 			bookmarks.POST("/:id", h.addPetInBookmarksById)        // Добавление животного в закладки по id DONE
 			bookmarks.DELETE("/:id", h.deletePetFromBookmarksById) // Удаление животного из закладок по id DONE
+		}
+		gigachat := api.Group("/gigachat")
+		{
+			gigachat.GET("/recommendations", h.getRecommendationsFromGigaChat)
 		}
 	}
 
