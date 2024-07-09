@@ -22,11 +22,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("sign-in", h.signIn)
 	}
 
-	user := router.Group("/user", h.userIdentity)
+	gigachat := router.Group("/gigachat", h.userIdentity)
 	{
-		user.GET("/recommendations", h.getRecommendationsFromGigaChat) // Получение рекомендаций от гигачата
-		user.PATCH("/", h.updateUser)                                  // Изменение данных пользователя
-		user.DELETE("/", h.deleteUser)                                 // Удаление пользователя
+		gigachat.GET("/recommendations", h.getRecommendationsFromGigaChat) // Получение рекомендаций от гигачата DONE
 	}
 
 	api := router.Group("/api", h.userIdentity)

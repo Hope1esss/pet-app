@@ -26,10 +26,14 @@ type Bookmarks interface {
 	GetAllBookmarks(userId int64) ([]model.Pet, error)
 	DeletePetFromBookmarksById(userId, petId int64) error
 }
+type GigaChat interface {
+	GetRecommendationsFromGigaChat(inputMessage string) string
+}
 type Service struct {
 	Authorization
 	Pet
 	Bookmarks
+	GigaChat
 }
 
 func NewService(repos *repository.Repository) *Service {
